@@ -3,8 +3,8 @@ const productsData = [
     "category": "product",
     "name": "OSCEC Hand Sanitizer 500ml / Aloe Vera / Gel Type Hand Sanitizer / Hand Sanitizer For Kids / Safe Care Sanitizer for Kids / ANTI-BACTERIAL Hand Sanitizer / Instant Hand Sanitizer / OSCEC Hand Sanitizer",
     "price": "RM29.90",
-    "img": "file:///C:/xampp/htdocs/OSCEC/OSCEC/img/product1.png",
-	"image": "file:///C:/xampp/htdocs/OSCEC/OSCEC/img/product1.png",
+    "img": "https://img.lazcdn.com/g/p/f1f7ac82b8b47cf4a855748c37d2f8ae.png_400x400q75.png",
+	"image": "https://img.lazcdn.com/g/p/f1f7ac82b8b47cf4a855748c37d2f8ae.png_400x400q75.png",
     "desc": "OSCEC Instant Hand Sanitizer kills 99.99% of germs instantly without water leaving your hands feeling refreshed.",
     "link": "https://www.lazada.com.my/products/pdp-i775298560-s18218747833.html?c=&channelLpJumpArgs=&clickTrackInfo=query%253A%253Bnid%253A775298560%253Bsrc%253AlazadaInShopSrp%253Brn%253A09cf3a9ad0c3d82a71577d24cd7db58c%253Bregion%253Amy%253Bsku%253A775298560_MY%253Bprice%253A29.9%253Bclient%253Adesktop%253Bsupplier_id%253A1000050447%253Bsession_id%253A%253Bbiz_source%253Ah5_internal%253Bslot%253A0%253Butlog_bucket_id%253A470687%253Basc_category_id%253A10002196%253Bitem_id%253A775298560%253Bsku_id%253A18218747833%253Bshop_id%253A252822%253BtemplateInfo%253A107880_A3_C_E%2523&freeshipping=1&fs_ab=2&fuse_fs=&lang=en&location=Melaka&price=29.9&priceCompare=skuId%3A18218747833%3Bsource%3Alazada-search-voucher-in-shop%3Bsn%3A09cf3a9ad0c3d82a71577d24cd7db58c%3BoriginPrice%3A2990%3BdisplayPrice%3A2990%3BisGray%3Afalse%3BsinglePromotionId%3A-1%3BsingleToolCode%3AmockedSalePrice%3BvoucherPricePlugin%3A0%3Btimestamp%3A1788418215270&ratingscore=4.843434343434343&request_id=09cf3a9ad0c3d82a71577d24cd7db58c&review=198&sale=1494&search=1&spm=a2o4k.store_product.list.0&stock=1"
   },
