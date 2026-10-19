@@ -1191,6 +1191,16 @@ div.page-header div.container {
     width: 100%;
 }
 
+.desktop-only {
+    display: block;
+}
+
+@media screen and (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+}
+
 /*******************************/
 /********* Feature CSS *********/
 /*******************************/
