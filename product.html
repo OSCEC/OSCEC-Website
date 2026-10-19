@@ -52,13 +52,16 @@
 					<a href="https://g.page/r/CQsWRHD2MSo5EBM/review" class="nav-item nav-link">Review Us</a>
 					<a href="https://s.lazada.com.my/s.Z2Fsz3?c=y" class="nav-item nav-link" style="color: #8BC34A; font-weight: bold; transition: color 0.3s;" onmouseover="this.style.color='#FFB834'" onmouseout="this.style.color='#8BC34A'">Shop Now</a>
 					
-		<!-- Profile dropdown -->
+		
+		<!-- Profile dropdown --
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Help</a>
                     <div class="dropdown-menu">
                         <a href="enquiry.html" class="dropdown-item">Product Enquiry</a>
                     </div>
                 </div>
+		!-- Profile dropdown -->
+		
               </div>
             </div>
           </div>
@@ -79,6 +82,7 @@
             </div>
         </div>
         <!-- Page Header End -->
+
 
 <!-- Product Page Items Start -->
 <div class="menu">
@@ -102,26 +106,50 @@
             </ul>
 
             <div class="tab-content">
+
                 <div id="product" class="tab-pane active">
+                    <div class="pagination-top" id="product-pagination-top"></div>
                     <div class="pgrid-wrapper">
                         <div class="pgrid-container" id="product-list"></div>
                     </div>
+                    <div class="pagination-bottom" id="product-pagination-bottom"></div>
                 </div>
+
                 <div id="service" class="tab-pane fade">
+                    <div class="pagination-top" id="service-pagination-top"></div>
                     <div class="pgrid-wrapper">
                         <div class="pgrid-container" id="service-list"></div>
                     </div>
+                    <div class="pagination-bottom" id="service-pagination-bottom"></div>
                 </div>
+
                 <div id="machine" class="tab-pane fade">
+                    <div class="pagination-top" id="machine-pagination-top"></div>
                     <div class="pgrid-wrapper">
                         <div class="pgrid-container" id="machine-list"></div>
                     </div>
+                    <div class="pagination-bottom" id="machine-pagination-bottom"></div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 <!-- Product Page Items End -->
+
+				<!-- Product Enquiry CTA Start -->
+				<div class="product-enquiry-cta">
+					<a href="enquiry.html" class="product-enquiry-link">
+						<span class="product-enquiry-question">
+							Can’t Find What You’re Looking For?
+						</span>
+						<span class="product-enquiry-action">
+							Click Here to Make an Enquiry
+							<i class="fas fa-arrow-right"></i>
+						</span>
+					</a>
+				</div>
+				<!-- Product Enquiry CTA End -->
 
         <!-- Footer Start -->
         <div class="footer" id="contact" style="scroll-margin-top: 100px;">
@@ -133,7 +161,7 @@
                                 <div class="footer-contact">
                                     <h2>Our Address</h2>
                                     <p class="gold-hover-address" onclick="document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="cursor: pointer;">
-									<i class="fa fa-map-marker-alt"></i><b>No. 7, Jalan Eco 1, Zon Industri Ayer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Keroh Baru Ayer Keroh Baru, 75450 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Melaka.</b></p>
+									<i class="fa fa-map-marker-alt"></i><b>No. 7, Jalan Eco 1, Zon Industri Ayer Keroh Baru Ayer Keroh Baru, 75450 Melaka.</b></p>
                                     <p><i class="fa fa-phone-alt"></i><a href="tel:+6016-322-2641" class="gold-hover-link"><b>+6016-322-2641</b></a></p>
                                     <p><i class="fa fa-envelope"></i><a href="mailto:sofgold2u@gmail.com" class="gold-hover-link"><span><b>sofgold2u@gmail.com</b></span></a></p>
                                     <div class="footer-social">
@@ -197,135 +225,357 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
 		
+<script src="products.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    let currentHash = window.location.hash;
+    const PRODUCTS_PER_PAGE = 40;
+    const categories = ["product", "service", "machine"];
 
-    if (currentHash) {
+    const currentPages = {
+        product: 1,
+        service: 1,
+        machine: 1
+    };
 
-        document.querySelectorAll('.menu-tab .nav-link').forEach(nav => nav.classList.remove('active'));
-        document.querySelectorAll('.tab-content .tab-pane').forEach(pane => {
-            pane.classList.remove('active', 'show');
+    const searchInput = document.getElementById("product-search");
+
+    const filteredProducts = {
+        product: [],
+        service: [],
+        machine: []
+    };
+
+    function getCategoryProducts(category) {
+        const keyword = searchInput.value.trim().toLowerCase();
+
+        return productsData.filter(function (item) {
+            const matchesCategory = item.category === category;
+            const matchesSearch = item.name.toLowerCase().includes(keyword);
+
+            return matchesCategory && matchesSearch;
         });
-
-        let activeNav = document.querySelector(`.menu-tab a[href="${currentHash}"]`);
-        if (activeNav) {
-            activeNav.classList.add('active');
-        }
-
-        let activePane = document.querySelector(currentHash);
-        if (activePane) {
-            activePane.classList.add('active', 'show');
-        }
     }
 
-    document.querySelectorAll('.menu-tab a[data-toggle="pill"]').forEach(tab => {
-        tab.addEventListener('click', function (e) {
-            let targetHash = this.getAttribute('href');
-            history.replaceState(null, null, targetHash);
+    function createCard(item) {
+        return `
+            <div class="pgrid-card-link">
+                <div class="pgrid-card">
+                    <div class="pgrid-img-box">
+                        <img src="${item.img}" alt="${item.name}">
+                    </div>
+
+                    <div class="pgrid-body">
+                        <div class="pgrid-header">
+                            <span class="pgrid-title">${item.name}</span>
+                            <strong class="pgrid-price">${item.price}</strong>
+                        </div>
+
+                        <p class="pgrid-desc">${item.desc}</p>
+
+                        <button type="button" class="pgrid-btn-add view-btn"
+                            data-name="${item.name}"
+                            data-price="${item.price}"
+                            data-img="${item.img}"
+                            data-desc="${item.desc}"
+                            data-link="${item.link}">View Products</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function createPagination(category, totalPages, position) {
+        const container = document.getElementById(
+            `${category}-pagination-${position}`
+        );
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        const pagination = document.createElement("div");
+        pagination.className = "product-pagination";
+
+        const total = filteredProducts[category].length;
+        const start = (currentPages[category] - 1) * PRODUCTS_PER_PAGE + 1;
+        const end = Math.min(
+            currentPages[category] * PRODUCTS_PER_PAGE,
+            total
+        );
+
+        const info = document.createElement("span");
+        info.className = "pagination-info";
+        info.textContent = `${start}-${end} of ${total}`;
+        pagination.appendChild(info);
+
+        function addButton(label, page, disabled, active) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = label;
+            button.disabled = disabled;
+
+            if (active) {
+                button.classList.add("active");
+                button.setAttribute("aria-current", "page");
+            }
+
+            button.addEventListener("click", function () {
+                if (page === currentPages[category]) return;
+
+                currentPages[category] = page;
+                renderCategory(category);
+
+                const tab = document.getElementById(category);
+                if (tab) {
+                    tab.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
+            });
+
+            pagination.appendChild(button);
+        }
+
+        addButton(
+            "‹",
+            Math.max(1, currentPages[category] - 1),
+            currentPages[category] === 1,
+            false
+        );
+
+        // Show a compact range of page numbers.
+        let firstPage = Math.max(1, currentPages[category] - 2);
+        let lastPage = Math.min(totalPages, firstPage + 4);
+        firstPage = Math.max(1, lastPage - 4);
+
+        if (firstPage > 1) {
+            addButton("1", 1, false, currentPages[category] === 1);
+
+            if (firstPage > 2) {
+                const dots = document.createElement("span");
+                dots.textContent = "…";
+                pagination.appendChild(dots);
+            }
+        }
+
+        for (let page = firstPage; page <= lastPage; page++) {
+            addButton(
+                String(page),
+                page,
+                false,
+                currentPages[category] === page
+            );
+        }
+
+        if (lastPage < totalPages) {
+            if (lastPage < totalPages - 1) {
+                const dots = document.createElement("span");
+                dots.textContent = "…";
+                pagination.appendChild(dots);
+            }
+
+            addButton(
+                String(totalPages),
+                totalPages,
+                false,
+                currentPages[category] === totalPages
+            );
+        }
+
+        addButton(
+            "›",
+            Math.min(totalPages, currentPages[category] + 1),
+            currentPages[category] === totalPages,
+            false
+        );
+
+        container.appendChild(pagination);
+    }
+
+    function renderCategory(category) {
+        const container = document.getElementById(`${category}-list`);
+        if (!container) return;
+
+        filteredProducts[category] = getCategoryProducts(category);
+
+        const total = filteredProducts[category].length;
+        const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+
+        // Keep the current page valid after searching.
+        if (totalPages === 0) {
+            currentPages[category] = 1;
+        } else if (currentPages[category] > totalPages) {
+            currentPages[category] = totalPages;
+        }
+
+        const startIndex = (currentPages[category] - 1) * PRODUCTS_PER_PAGE;
+
+        const pageProducts = filteredProducts[category].slice(
+            startIndex,
+            startIndex + PRODUCTS_PER_PAGE
+        );
+
+        container.innerHTML = "";
+
+        if (pageProducts.length === 0) {
+            container.innerHTML = `
+                <p class="no-products-found">
+                    Coming Soon.
+                </p>
+            `;
+        } else {
+            container.innerHTML = pageProducts.map(createCard).join("");
+        }
+
+        createPagination(category, totalPages, "top");
+        createPagination(category, totalPages, "bottom");
+    }
+
+    function renderAllCategories() {
+        categories.forEach(function (category) {
+            renderCategory(category);
         });
+    }
+
+    // Initial display.
+    renderAllCategories();
+
+    // Live Search: filter first, then paginate.
+    if (searchInput) {
+        searchInput.addEventListener("input", function () {
+            categories.forEach(function (category) {
+                currentPages[category] = 1;
+            });
+
+            renderAllCategories();
+        });
+    }
+
+    const modal = document.getElementById("custom-modal");
+    const modalBox = document.querySelector(".custom-modal-box");
+
+    // Preserve the existing View Products and Modal behavior.
+    document.addEventListener("click", function (e) {
+
+        const viewButton = e.target.closest(".view-btn");
+
+        if (viewButton) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const link = viewButton.getAttribute("data-link");
+
+            if (link && link !== "//") {
+                window.open(link, "_blank");
+            }
+
+            return;
+        }
+
+        const card = e.target.closest(".pgrid-card");
+
+        if (card && modal) {
+            e.preventDefault();
+
+            const button = card.querySelector(".view-btn");
+
+            if (button) {
+                document.getElementById("modal-img").src =
+                    button.getAttribute("data-img");
+
+                document.getElementById("modal-title").innerText =
+                    button.getAttribute("data-name");
+
+                document.getElementById("modal-price").innerText =
+                    button.getAttribute("data-price");
+
+                document.getElementById("modal-desc").innerText =
+                    button.getAttribute("data-desc");
+
+                modal.classList.add("active");
+            }
+        }
     });
+
+
+const modalCloseButton = document.getElementById("custom-modal-close");
+
+// Close with the dedicated button.
+if (modal && modalCloseButton) {
+    modalCloseButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.classList.remove("active");
+    });
+}
+
+// Close when tapping the dark overlay outside the details box.
+if (modal && modalBox) {
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.classList.remove("active");
+        }
+    });
+
+    // Keep the original desktop mouse behavior.
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        modalBox.addEventListener("mouseleave", function () {
+            modal.classList.remove("active");
+        });
+    }
+}
+
+// Close with Escape on devices with a keyboard.
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && modal) {
+        modal.classList.remove("active");
+    }
+});
+
+
 });
 </script>
-
-<script src="products.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-	productsData.forEach(item => {
-		const cardHTML = `
-			<div class="pgrid-card-link">
-				<div class="pgrid-card">
-					<div class="pgrid-img-box">
-						<img src="${item.img}" alt="${item.name}">
-					</div>
-					<div class="pgrid-body">
-						<div class="pgrid-header">
-							<span class="pgrid-title">${item.name}</span>
-							<strong class="pgrid-price">${item.price}</strong>
-						</div>
-						<p class="pgrid-desc">${item.desc}</p>
 
-						<button type="button" class="pgrid-btn-add view-btn" 
-								data-name="${item.name}" 
-								data-price="${item.price}" 
-								data-img="${item.img}" 
-								data-desc="${item.desc}"
-								data-link="${item.link}">View Products</button>
-					</div>
-				</div>
-			</div>
-		`;
+    const enquiryCTA = document.querySelector('.product-enquiry-link');
 
-		const container = document.getElementById(`${item.category}-list`);
-		if (container) {
-			container.innerHTML += cardHTML;
-		}
-	});
+    if (enquiryCTA) {
 
-	const modal = document.getElementById('custom-modal');
-	const modalBox = document.querySelector('.custom-modal-box');
+        enquiryCTA.addEventListener('mousemove', function (e) {
 
-	document.addEventListener('click', function(e) {
+            const rect = enquiryCTA.getBoundingClientRect();
 
-		/* =========================================
-		   VIEW PRODUCTS BUTTON → LAZADA
-		   ========================================= */
-		if (e.target && e.target.classList.contains('view-btn')) {
-			e.preventDefault();
-			e.stopPropagation();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-			const link = e.target.getAttribute('data-link');
+            enquiryCTA.style.setProperty('--mouse-x', x + 'px');
+            enquiryCTA.style.setProperty('--mouse-y', y + 'px');
+        });
 
-			/* 
-			   Currently link is "//", so do nothing.
-			   When you add the actual Lazada URL,
-			   it will open automatically.
-			*/
-			if (link && link !== "//") {
-				window.open(link, '_blank');
-			}
+    }
 
-			return;
-		}
-
-		/* =========================================
-		   PRODUCT CARD → OPEN MODAL
-		   ========================================= */
-		const card = e.target.closest('.pgrid-card');
-
-		if (card) {
-			e.preventDefault();
-
-			const button = card.querySelector('.view-btn');
-
-			if (button) {
-				document.getElementById('modal-img').src =
-					button.getAttribute('data-img');
-
-				document.getElementById('modal-title').innerText =
-					button.getAttribute('data-name');
-
-				document.getElementById('modal-price').innerText =
-					button.getAttribute('data-price');
-
-				document.getElementById('modal-desc').innerText =
-					button.getAttribute('data-desc');
-
-				modal.classList.add('active');
-			}
-		}
-	});
-
-	modalBox.addEventListener('mouseleave', function() {
-		modal.classList.remove('active');
-	});
 });
 </script>
 
 
 <div id="custom-modal" class="custom-modal-overlay">
     <div class="custom-modal-box">
+
+        <!-- Close Button -->
+        <button
+            type="button"
+            class="custom-modal-close"
+            id="custom-modal-close"
+            aria-label="Close product details">
+            &times;
+        </button>
+
         <div class="modal-content-wrapper">
             <div class="modal-img-container">
                 <img id="modal-img" src="" alt="Product Image">
@@ -336,8 +586,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <p id="modal-desc">Product Details...</p>
             </div>
         </div>
+
     </div>
 </div>
+
 
 </body>
 </html>

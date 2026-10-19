@@ -23,6 +23,7 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@29.2/dist/css/intlTelInput.css">
 
         <!-- Product Enquiry Styles -->
         <style>
@@ -146,252 +147,816 @@
                     height: 180px;
                 }
             }
+			
+				.enquiry-validation-modal {
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.55);
+					display: none;
+					align-items: center;
+					justify-content: center;
+					z-index: 9999;
+					padding: 20px;
+				}
+
+				.enquiry-validation-modal.active {
+					display: flex;
+				}
+
+				.enquiry-validation-modal-box {
+					position: relative;
+					width: 100%;
+					max-width: 450px;
+					background: #ffffff;
+					padding: 40px 30px;
+					text-align: center;
+					box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+				}
+
+				.enquiry-validation-close {
+					position: absolute;
+					top: 10px;
+					right: 15px;
+					border: none;
+					background: none;
+					font-size: 28px;
+					line-height: 1;
+					cursor: pointer;
+					color: #757575;
+				}
+
+				.enquiry-validation-close:hover {
+					color: #FFB834;
+				}
+
+				.enquiry-validation-icon {
+					font-size: 45px;
+					margin-bottom: 15px;
+					color: #FFB834;
+				}
+
+				.enquiry-validation-modal-box h3 {
+					margin-bottom: 12px;
+				}
+
+				.enquiry-validation-modal-box p {
+					margin-bottom: 25px;
+				}
+
+				.enquiry-status-modal {
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: rgba(0, 0, 0, 0.55);
+					display: none;
+					align-items: center;
+					justify-content: center;
+					z-index: 10000;
+					padding: 20px;
+				}
+
+				.enquiry-status-modal.active {
+					display: flex;
+				}
+
+				.enquiry-status-modal-box {
+					position: relative;
+					width: 100%;
+					max-width: 450px;
+					background: #ffffff;
+					padding: 45px 30px 35px;
+					text-align: center;
+					box-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
+				}
+
+				.enquiry-status-icon {
+					width: 90px;
+					height: 90px;
+					margin: 0 auto 25px;
+					position: relative;
+				}
+
+				.enquiry-loading-circle {
+					width: 75px;
+					height: 75px;
+					margin: 7px auto;
+					border: 5px solid #eeeeee;
+					border-top: 5px solid #8BC34A;
+					border-radius: 50%;
+					animation: enquiryLoadingSpin 1s linear infinite;
+				}
+
+				@keyframes enquiryLoadingSpin {
+					0% {
+						transform: rotate(0deg);
+					}
+
+					100% {
+						transform: rotate(360deg);
+					}
+				}
+
+				.enquiry-result-circle {
+					width: 80px;
+					height: 80px;
+					border: 4px solid;
+					border-radius: 50%;
+					margin: 5px auto;
+					position: relative;
+					transform: scale(0);
+					animation: enquiryCircleAppear 0.45s ease-out forwards;
+				}
+
+				.enquiry-result-success {
+					border-color: #28a745;
+				}
+
+				.enquiry-result-failure {
+					border-color: #dc3545;
+				}
+
+				@keyframes enquiryCircleAppear {
+					0% {
+						transform: scale(0);
+						opacity: 0;
+					}
+
+					70% {
+						transform: scale(1.12);
+						opacity: 1;
+					}
+
+					100% {
+						transform: scale(1);
+						opacity: 1;
+					}
+				}
+
+				.enquiry-checkmark {
+					position: absolute;
+					left: 23px;
+					top: 16px;
+					width: 27px;
+					height: 45px;
+					border-right: 5px solid #28a745;
+					border-bottom: 5px solid #28a745;
+					transform: rotate(45deg) scale(0);
+					animation: enquiryCheckAppear 0.4s ease-out 0.35s forwards;
+				}
+
+				@keyframes enquiryCheckAppear {
+					0% {
+						transform: rotate(45deg) scale(0);
+						opacity: 0;
+					}
+
+					70% {
+						transform: rotate(45deg) scale(1.15);
+						opacity: 1;
+					}
+
+					100% {
+						transform: rotate(45deg) scale(1);
+						opacity: 1;
+					}
+				}
+
+				.enquiry-cross {
+					position: absolute;
+					width: 42px;
+					height: 42px;
+					top: 18px;
+					left: 19px;
+					transform: scale(0);
+					animation: enquiryCrossAppear 0.4s ease-out 0.35s forwards;
+				}
+
+				.enquiry-cross::before,
+				.enquiry-cross::after {
+					content: "";
+					position: absolute;
+					top: 18px;
+					left: 0;
+					width: 42px;
+					height: 5px;
+					background: #dc3545;
+					border-radius: 3px;
+				}
+
+				.enquiry-cross::before {
+					transform: rotate(45deg);
+				}
+
+				.enquiry-cross::after {
+					transform: rotate(-45deg);
+				}
+
+				@keyframes enquiryCrossAppear {
+					0% {
+						transform: scale(0);
+						opacity: 0;
+					}
+
+					70% {
+						transform: scale(1.15);
+						opacity: 1;
+					}
+
+					100% {
+						transform: scale(1);
+						opacity: 1;
+					}
+				}
+
+				.enquiry-status-modal-box h3 {
+					margin-bottom: 12px;
+				}
+
+				.enquiry-status-modal-box p {
+					margin-bottom: 25px;
+				}
+
+				.enquiry-status-button {
+					min-width: 110px;
+				}
+
+				.enquiry-status-content {
+					display: none;
+				}
+
+				.enquiry-status-content.active {
+					display: block;
+				}
+				
+				.iti {
+					width: 100%;
+				}
+
+				.iti input {
+					width: 100%;
+				}
+
+				.iti__tel-input {
+					width: 100%;
+				}
+
+				.iti__country-container {
+					z-index: 5;
+				}
+
+				.iti-phone-invalid {
+					border-color: #dc3545 !important;
+				}
+
+				.iti-phone-valid {
+					border-color: #8BC34A !important;
+				}
+
+				@media (max-width: 575.98px) {
+					.iti__country-list {
+						max-width: calc(100vw - 40px);
+					}
+				}
+
+				.enquiry-product-picker {
+					position: relative;
+					width: 100%;
+					z-index: 1001;
+				}
 
 
-.enquiry-validation-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.55);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-}
+				.enquiry-product-picker-trigger {
+					width: 100%;
+					min-height: 45px;
+					padding: 10px 15px;
 
-.enquiry-validation-modal.active {
-    display: flex;
-}
+					border: 1px solid #dddddd;
+					border-radius: 0;
 
-.enquiry-validation-modal-box {
-    position: relative;
-    width: 100%;
-    max-width: 450px;
-    background: #ffffff;
-    padding: 40px 30px;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-}
+					background: #ffffff;
+					color: #555555;
 
-.enquiry-validation-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    border: none;
-    background: none;
-    font-size: 28px;
-    line-height: 1;
-    cursor: pointer;
-    color: #757575;
-}
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
 
-.enquiry-validation-close:hover {
-    color: #FFB834;
-}
+					text-align: left;
+					cursor: pointer;
 
-.enquiry-validation-icon {
-    font-size: 45px;
-    margin-bottom: 15px;
-    color: #FFB834;
-}
+					outline: none;
 
-.enquiry-validation-modal-box h3 {
-    margin-bottom: 12px;
-}
+					transition:
+						border-color 0.3s ease,
+						box-shadow 0.3s ease;
+				}
 
-.enquiry-validation-modal-box p {
-    margin-bottom: 25px;
-}
 
-.enquiry-status-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.55);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    padding: 20px;
-}
+				.enquiry-product-picker-trigger:hover,
+				.enquiry-product-picker.open
+				.enquiry-product-picker-trigger {
+					border-color: #8BC34A;
+				}
 
-.enquiry-status-modal.active {
-    display: flex;
-}
 
-.enquiry-status-modal-box {
-    position: relative;
-    width: 100%;
-    max-width: 450px;
-    background: #ffffff;
-    padding: 45px 30px 35px;
-    text-align: center;
-    box-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
-}
+				.enquiry-product-picker-trigger i {
+					color: #888888;
+					font-size: 13px;
 
-.enquiry-status-icon {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 25px;
-    position: relative;
-}
+					transition: transform 0.2s ease;
+				}
 
-.enquiry-loading-circle {
-    width: 75px;
-    height: 75px;
-    margin: 7px auto;
-    border: 5px solid #eeeeee;
-    border-top: 5px solid #8BC34A;
-    border-radius: 50%;
-    animation: enquiryLoadingSpin 1s linear infinite;
-}
 
-@keyframes enquiryLoadingSpin {
-    0% {
-        transform: rotate(0deg);
-    }
+				.enquiry-product-picker.open
+				.enquiry-product-picker-trigger i {
+					transform: rotate(180deg);
+				}
 
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
-.enquiry-result-circle {
-    width: 80px;
-    height: 80px;
-    border: 4px solid;
-    border-radius: 50%;
-    margin: 5px auto;
-    position: relative;
-    transform: scale(0);
-    animation: enquiryCircleAppear 0.45s ease-out forwards;
-}
+				.enquiry-product-picker-selected {
+					color: #333333;
+				}
 
-.enquiry-result-success {
-    border-color: #28a745;
-}
+				.enquiry-product-picker-dropdown {
+					position: absolute;
+					top: 50px;
+					left: 0;
+					width: 100%;
+					background: #ffffff;
+					border: 1px solid #dddddd;
+					box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+					z-index: 9999;
+					display: none;
+				}
 
-.enquiry-result-failure {
-    border-color: #dc3545;
-}
+				.enquiry-product-row {
+					display: flex;
+					align-items: flex-start;
+					gap: 25px;
+					overflow: visible;
+				}
 
-@keyframes enquiryCircleAppear {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
+				.enquiry-product-select {
+					flex: 1;
+					position: relative;
+					overflow: visible;
+				}
 
-    70% {
-        transform: scale(1.12);
-        opacity: 1;
-    }
+				.enquiry-product-picker.open
+				.enquiry-product-picker-dropdown {
+					display: block;
+				}
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
+				.enquiry-product-search {
+					position: relative;
 
-.enquiry-checkmark {
-    position: absolute;
-    left: 23px;
-    top: 16px;
-    width: 27px;
-    height: 45px;
-    border-right: 5px solid #28a745;
-    border-bottom: 5px solid #28a745;
-    transform: rotate(45deg) scale(0);
-    animation: enquiryCheckAppear 0.4s ease-out 0.35s forwards;
-}
+					padding: 10px;
 
-@keyframes enquiryCheckAppear {
-    0% {
-        transform: rotate(45deg) scale(0);
-        opacity: 0;
-    }
+					border-bottom: 1px solid #eeeeee;
+				}
 
-    70% {
-        transform: rotate(45deg) scale(1.15);
-        opacity: 1;
-    }
 
-    100% {
-        transform: rotate(45deg) scale(1);
-        opacity: 1;
-    }
-}
+				.enquiry-product-search i {
+					position: absolute;
 
-.enquiry-cross {
-    position: absolute;
-    width: 42px;
-    height: 42px;
-    top: 18px;
-    left: 19px;
-    transform: scale(0);
-    animation: enquiryCrossAppear 0.4s ease-out 0.35s forwards;
-}
+					left: 23px;
+					top: 50%;
 
-.enquiry-cross::before,
-.enquiry-cross::after {
-    content: "";
-    position: absolute;
-    top: 18px;
-    left: 0;
-    width: 42px;
-    height: 5px;
-    background: #dc3545;
-    border-radius: 3px;
-}
+					transform: translateY(-50%);
 
-.enquiry-cross::before {
-    transform: rotate(45deg);
-}
+					color: #999999;
 
-.enquiry-cross::after {
-    transform: rotate(-45deg);
-}
+					pointer-events: none;
+				}
 
-@keyframes enquiryCrossAppear {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
 
-    70% {
-        transform: scale(1.15);
-        opacity: 1;
-    }
+				.enquiry-product-search input {
+					width: 100%;
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
+					min-height: 42px;
 
-.enquiry-status-modal-box h3 {
-    margin-bottom: 12px;
-}
+					padding: 8px 12px 8px 38px;
 
-.enquiry-status-modal-box p {
-    margin-bottom: 25px;
-}
+					border: 1px solid #dddddd;
 
-.enquiry-status-button {
-    min-width: 110px;
-}
+					border-radius: 0;
 
-.enquiry-status-content {
-    display: none;
-}
+					outline: none;
 
-.enquiry-status-content.active {
-    display: block;
-}
+					font-size: 14px;
+				}
+
+
+				.enquiry-product-search input:focus {
+					border-color: #8BC34A;
+				}
+
+				.enquiry-product-results {
+					max-height: 320px;
+
+					overflow-y: auto;
+				}
+
+
+				.enquiry-product-result {
+					width: 100%;
+
+					border: 0;
+					border-bottom: 1px solid #f1f1f1;
+
+					background: #ffffff;
+
+					padding: 9px 12px;
+
+					display: flex;
+					align-items: center;
+
+					gap: 12px;
+
+					text-align: left;
+
+					cursor: pointer;
+
+					transition: background 0.2s ease;
+				}
+
+
+				.enquiry-product-result:hover,
+				.enquiry-product-result:focus {
+					background: #f8f8f8;
+
+					outline: none;
+				}
+
+
+				.enquiry-product-result img {
+					width: 48px;
+					height: 48px;
+
+					flex: 0 0 48px;
+
+					object-fit: cover;
+
+					border: 1px solid #eeeeee;
+				}
+
+
+				.enquiry-product-result-name {
+					font-size: 14px;
+
+					line-height: 1.45;
+
+					color: #333333;
+				}
+
+
+				.enquiry-product-no-results {
+					padding: 18px;
+
+					text-align: center;
+
+					color: #888888;
+
+					font-size: 14px;
+				}
+				
+				.enquiry-form-row {
+					display: flex;
+					gap: 15px; 
+					align-items: flex-start;
+					width: 100%;
+				}
+
+
+				.enquiry-col-product {
+					flex: 1;
+				}
+
+
+				.enquiry-col-quantity {
+					width: 110px;
+					flex-shrink: 0;
+				}
+
+				@media (max-width: 480px) {
+					.enquiry-form-row {
+						flex-direction: column;
+						gap: 0;
+					}
+					.enquiry-col-quantity {
+						width: 100%;
+					}
+				}
+
+				.enquiry-form-wrapper,
+				.enquiry-form-wrapper *,
+				.enquiry-product-picker,
+				.enquiry-product-picker * {
+					box-sizing: border-box;
+				}
+
+				.enquiry-product-row {
+					display: flex;
+					align-items: flex-start;
+					gap: 25px;
+					width: 100%;
+					min-width: 0;
+					overflow: visible;
+				}
+
+				.enquiry-product-select {
+					flex: 1 1 0;
+					min-width: 0;
+					position: relative;
+					overflow: visible;
+				}
+
+				.enquiry-product-picker {
+					position: relative;
+					width: 100%;
+					min-width: 0;
+				}
+
+				.enquiry-product-picker-trigger {
+					width: 100%;
+					min-width: 0;
+					min-height: 45px;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: 12px;
+				}
+
+				#enquiry-product-picker-value {
+					flex: 1 1 auto;
+					min-width: 0;
+					white-space: normal;
+					overflow-wrap: anywhere;
+					word-break: normal;
+					line-height: 1.6;
+				}
+
+				.enquiry-product-picker-trigger > i {
+					flex: 0 0 auto;
+				}
+
+				.enquiry-product-picker-dropdown {
+					left: 0;
+					right: auto;
+					width: 100%;
+					min-width: 0;
+					max-width: 100%;
+				}
+
+				.enquiry-product-search {
+					min-width: 0;
+				}
+
+				.enquiry-product-search input {
+					min-width: 0;
+					max-width: 100%;
+				}
+
+				.enquiry-product-results {
+					max-height: 320px;
+					overflow-x: hidden;
+					overflow-y: auto;
+					-webkit-overflow-scrolling: touch;
+				}
+
+				.enquiry-product-result {
+					width: 100%;
+					min-width: 0;
+					align-items: center;
+				}
+
+				.enquiry-product-result img {
+					flex: 0 0 48px;
+					width: 48px;
+					height: 48px;
+					object-fit: contain;
+				}
+
+				.enquiry-product-result-name {
+					flex: 1 1 auto;
+					min-width: 0;
+					white-space: normal;
+					overflow-wrap: anywhere;
+					word-break: normal;
+				}
+
+				.enquiry-product-preview {
+					width: 180px;
+					flex: 0 0 180px;
+					min-width: 0;
+				}
+
+				.enquiry-product-preview img {
+					display: block;
+					width: 100%;
+					height: 180px;
+					object-fit: contain;
+					object-position: center;
+				}
+
+				@media (max-width: 767.98px) {
+
+					.enquiry-section {
+						padding: 35px 12px;
+					}
+
+					.enquiry-section > .container {
+						padding-left: 0;
+						padding-right: 0;
+						width: 100%;
+						max-width: 100%;
+					}
+
+					.enquiry-form-wrapper {
+						width: 100%;
+						max-width: 100%;
+						min-width: 0;
+						padding: 24px 16px;
+					}
+
+					.enquiry-form-group {
+						width: 100%;
+						min-width: 0;
+						margin-bottom: 22px;
+					}
+
+					.enquiry-form-control {
+						width: 100%;
+						max-width: 100%;
+						min-width: 0;
+						font-size: 16px;
+					}
+
+					.enquiry-product-row {
+						display: flex;
+						flex-direction: column;
+						align-items: stretch;
+						gap: 0;
+						width: 100%;
+						min-width: 0;
+					}
+
+					.enquiry-product-select {
+						display: block;
+						width: 100%;
+						max-width: 100%;
+						min-width: 0;
+						flex: 1 1 auto;
+					}
+
+					.enquiry-product-picker {
+						width: 100%;
+						max-width: 100%;
+					}
+
+					.enquiry-product-picker-trigger {
+						width: 100%;
+						min-height: 48px;
+						padding: 10px 12px;
+						align-items: center;
+						gap: 10px;
+					}
+
+					#enquiry-product-picker-value {
+						min-width: 0;
+						flex: 1 1 auto;
+						overflow-wrap: anywhere;
+						line-height: 1.6;
+					}
+
+					.enquiry-product-picker-dropdown {
+						position: absolute;
+						top: calc(100% + 2px);
+						left: 0;
+						right: 0;
+						width: 100%;
+						max-width: 100%;
+						z-index: 9999;
+						background: #ffffff;
+					}
+
+					.enquiry-product-search {
+						padding: 8px;
+					}
+
+					.enquiry-product-search i {
+						left: 20px;
+					}
+
+					.enquiry-product-search input {
+						width: 100%;
+						min-height: 44px;
+						padding-left: 36px;
+						font-size: 16px;
+					}
+
+					.enquiry-product-results {
+						max-height: min(42vh, 300px);
+						overflow-x: hidden;
+						overflow-y: auto;
+						overscroll-behavior: contain;
+						-webkit-overflow-scrolling: touch;
+					}
+
+					.enquiry-product-result {
+						display: flex;
+						align-items: center;
+						gap: 10px;
+						padding: 10px;
+					}
+
+					.enquiry-product-result img {
+						flex: 0 0 48px;
+						width: 48px;
+						height: 48px;
+						object-fit: contain;
+					}
+
+					.enquiry-product-result-name {
+						flex: 1 1 auto;
+						min-width: 0;
+						font-size: 14px;
+						line-height: 1.5;
+						overflow-wrap: anywhere;
+					}
+
+					.enquiry-product-preview {
+						display: none;
+						width: 100%;
+						max-width: 240px;
+						flex: 0 1 auto;
+						margin: 20px auto 0;
+						text-align: center;
+					}
+
+					.enquiry-product-preview img {
+						width: 100%;
+						max-width: 240px;
+						height: 200px;
+						margin: 0 auto;
+						object-fit: contain;
+						object-position: center;
+					}
+
+					.enquiry-quantity-group {
+						width: 100%;
+						min-width: 0;
+					}
+
+					.enquiry-interest {
+						align-items: flex-start;
+						gap: 10px;
+					}
+
+					.enquiry-interest input[type="checkbox"] {
+						margin-top: 5px;
+					}
+
+					.enquiry-interest label {
+						min-width: 0;
+						overflow-wrap: anywhere;
+					}
+				}
+
+				@media (max-width: 400px) {
+
+					.enquiry-form-wrapper {
+						padding: 20px 12px;
+					}
+
+					.enquiry-product-result {
+						gap: 8px;
+						padding: 9px 8px;
+					}
+
+					.enquiry-product-result img {
+						flex-basis: 42px;
+						width: 42px;
+						height: 42px;
+					}
+
+					.enquiry-product-result-name {
+						font-size: 13px;
+					}
+
+					.enquiry-product-preview {
+						max-width: 210px;
+					}
+
+					.enquiry-product-preview img {
+						max-width: 210px;
+						height: 180px;
+					}
+				}
         </style>
     </head>
     <body>
@@ -413,15 +978,7 @@
 					<a href="product.html" class="nav-item nav-link">Products</a>
                     <a href="#contact" class="nav-item nav-link">Contact</a>
 					<a href="https://g.page/r/CQsWRHD2MSo5EBM/review" class="nav-item nav-link">Review Us</a>
-					<a href="https://s.lazada.com.my/s.Z2Fsz3?c=y" class="nav-item nav-link" style="color: #8BC34A; font-weight: bold; transition: color 0.3s;" onmouseover="this.style.color='#FFB834'" onmouseout="this.style.color='#8BC34A'">Shop Now</a>
-					
-		<!-- Profile dropdown -->
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Help</a>
-                    <div class="dropdown-menu">
-                        <a href="enquiry.html" class="dropdown-item">Product Enquiry</a>
-                    </div>
-                </div>
+					<a href="product.html" class="nav-item nav-link" style="color: #8BC34A; font-weight: bold; transition: color 0.3s;" onmouseover="this.style.color='#FFB834'" onmouseout="this.style.color='#8BC34A'">Shop Now</a>
               </div>
             </div>
           </div>
@@ -488,20 +1045,21 @@
                         </div>
 
 
-                        <!-- Phone / WhatsApp -->
-                        <div class="enquiry-form-group">
-                            <label for="customer-phone">
-                                Phone / WhatsApp <span class="enquiry-required">*</span>
-                            </label>
+						<!-- Phone / WhatsApp -->
+						<div class="enquiry-form-group">
+							<label for="customer-phone">
+								Phone / WhatsApp <span class="enquiry-required">*</span>
+							</label>
 
-                            <input
-                                type="tel"
-                                id="customer-phone"
-                                name="customer_phone"
-                                class="enquiry-form-control"
-                                placeholder="Enter your phone or WhatsApp number"
-                                required>
-                        </div>
+							<input
+								type="tel"
+								id="customer-phone"
+								name="customer_phone"
+								class="enquiry-form-control"
+								placeholder="Enter Your Phone Number"
+								autocomplete="tel"
+								required>
+						</div>
 
 						<!-- Company -->
 						<div class="enquiry-form-group">
@@ -557,36 +1115,67 @@
 
 								<div class="enquiry-product-row">
 
-									<div class="enquiry-product-select">
+							<div class="enquiry-product-select">
 
-										<select
-											id="product-selection"
-											name="product_name"
-											class="enquiry-form-control"
-											required>
+								<!-- Enquiry Product Search Picker -->
+								<div class="enquiry-product-picker" id="enquiry-product-picker">
 
-											<option value="">
-												Select Product
-											</option>
+									<button
+										type="button"
+										id="enquiry-product-picker-trigger"
+										class="enquiry-product-picker-trigger"
+										aria-expanded="false">
 
-										</select>
+										<span id="enquiry-product-picker-value">
+											Search Product
+										</span>
 
-										<div class="enquiry-quantity-group" style="margin-top: 10px;">
-											<label for="product-quantity" style="display: block; margin-bottom: 5px; font-size: 14px;">
-												Quantity <span class="enquiry-required">*</span>
-											</label>
+										<i class="fas fa-chevron-down"></i>
+
+									</button>
+
+
+									 <div
+										class="enquiry-product-picker-dropdown"
+										id="enquiry-product-picker-dropdown">
+
+										<div class="enquiry-product-search">
+
+											<i class="fas fa-search"></i>
+
 											<input
-												type="number"
-												id="product-quantity"
-												name="product_quantity"
-												class="enquiry-form-control"
-												placeholder="Enter quantity"
-												value="1"
-												min="1"
-												step="1"
-												required>
+												type="text"
+												id="enquiry-product-search"
+												placeholder="Search products..."
+												autocomplete="off">
+
 										</div>
+
+										<div
+											class="enquiry-product-results"
+											id="enquiry-product-results">
+										</div>
+
 									</div>
+
+								</div>
+								
+							<div class="enquiry-quantity-group" style="margin-top: 10px;">
+								<label for="product-quantity" style="display: block; margin-bottom: 5px; font-size: 14px;">
+									Quantity <span class="enquiry-required">*</span>
+								</label>
+								<input
+									type="number"
+									id="product-quantity"
+									name="product_quantity"
+									class="enquiry-form-control"
+									placeholder="Enter quantity"
+									value="1"
+									min="1"
+									step="1"
+									required>
+							</div>
+						</div>
 
 									<!-- Product Image -->
 									<div
@@ -655,6 +1244,11 @@
         </div>
         <!-- Product Enquiry End -->
 
+    <!-- Hidden value used by existing enquiry validation -->
+    <input
+        type="hidden"
+        id="product-selection"
+        value="">
 
         <!-- Footer Start -->
         <div class="footer" id="contact" style="scroll-margin-top: 100px;">
@@ -666,7 +1260,7 @@
                                 <div class="footer-contact">
                                     <h2>Our Address</h2>
                                     <p class="gold-hover-address" onclick="document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });" style="cursor: pointer;">
-									<i class="fa fa-map-marker-alt"></i><b>No. 7, Jalan Eco 1, Zon Industri Ayer &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Keroh Baru Ayer Keroh Baru, 75450 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Melaka.</b></p>
+									<i class="fa fa-map-marker-alt"></i><b>No. 7, Jalan Eco 1, Zon Industri Ayer Keroh Baru Ayer Keroh Baru, 75450 Melaka.</b></p>
                                     <p><i class="fa fa-phone-alt"></i><a href="tel:+6016-322-2641" class="gold-hover-link"><b>+6016-322-2641</b></a></p>
                                     <p><i class="fa fa-envelope"></i><a href="mailto:sofgold2u@gmail.com" class="gold-hover-link"><span><b>sofgold2u@gmail.com</b></span></a></p>
                                     <div class="footer-social">
@@ -717,7 +1311,6 @@
             <i class="fa fa-chevron-up"></i>
         </a>
 
-<!-- 产品数据源 -->
 <script src="products.js"></script>
 
 <!-- EmailJS SDK -->
@@ -730,98 +1323,433 @@
     })();
 </script>
 
+<!-- International Phone Input -->
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@29.2/dist/js/intlTelInput.min.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const productSelection = document.getElementById("product-selection");
-    const productCategory = document.getElementById("product-category");
-    const productPreview = document.getElementById("enquiry-product-preview");
-    const productImage = document.getElementById("enquiry-product-image");
-    const enquiryForm = document.getElementById("product-enquiry-form");
+const phoneInput = document.getElementById("customer-phone");
 
-    // 保存当前筛选出来的商品映射
-    let filteredProducts = [];
+const iti = phoneInput
+    ? window.intlTelInput(phoneInput, {
+        initialCountry: "my",
 
-    /* =========================================
-       1. 动态加载 Product 下拉框 (修复索引错位问题)
-       ========================================= */
-    function loadProducts(category) {
-        if (typeof productsData === "undefined" || !Array.isArray(productsData)) {
-            console.error("未找到 productsData，请检查 products.js 是否正确引入并声明了变量！");
+        separateDialCode: true,
+
+        countrySelectorMode: "AUTO",
+
+        countryOrder: [
+            "my",
+            "sg",
+            "cn",
+            "hk",
+            "jp",
+            "gb",
+            "us"
+        ],
+
+        strictMode: true,
+
+        loadUtils: () =>
+            import(
+                "https://cdn.jsdelivr.net/npm/intl-tel-input@29.2/dist/js/utils.js"
+            )
+    })
+    : null;
+
+const productSelection =
+    document.getElementById("product-selection");
+
+const productCategory =
+    document.getElementById("product-category");
+
+const productPreview =
+    document.getElementById("enquiry-product-preview");
+
+const productImage =
+    document.getElementById("enquiry-product-image");
+
+const enquiryForm =
+    document.getElementById("product-enquiry-form");
+
+const enquiryProductPicker =
+    document.getElementById("enquiry-product-picker");
+
+const enquiryProductPickerTrigger =
+    document.getElementById("enquiry-product-picker-trigger");
+
+const enquiryProductPickerValue =
+    document.getElementById("enquiry-product-picker-value");
+
+const enquiryProductPickerDropdown =
+    document.getElementById("enquiry-product-picker-dropdown");
+
+const enquiryProductSearch =
+    document.getElementById("enquiry-product-search");
+
+const enquiryProductResults =
+    document.getElementById("enquiry-product-results");
+
+let filteredProducts = [];
+
+function resetImagePreview() {
+
+    if (productPreview) {
+        productPreview.style.display = "none";
+    }
+
+    if (productImage) {
+        productImage.src = "";
+        productImage.alt = "";
+    }
+}
+
+function resetProductPicker() {
+
+    if (productSelection) {
+        productSelection.value = "";
+    }
+
+    if (enquiryProductPickerValue) {
+        enquiryProductPickerValue.textContent = "Search Product";
+        enquiryProductPickerValue.classList.remove(
+            "enquiry-product-picker-selected"
+        );
+    }
+
+    if (enquiryProductSearch) {
+        enquiryProductSearch.value = "";
+    }
+
+    if (enquiryProductResults) {
+        enquiryProductResults.innerHTML = "";
+    }
+
+    if (enquiryProductPicker) {
+        enquiryProductPicker.classList.remove("open");
+    }
+
+    if (enquiryProductPickerTrigger) {
+        enquiryProductPickerTrigger.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+}
+
+function loadProducts(category) {
+
+    if (
+        typeof productsData === "undefined" ||
+        !Array.isArray(productsData)
+    ) {
+
+        console.error(
+            "未找到 productsData，请检查 products.js 是否正确引入并声明了变量！"
+        );
+
+        return;
+    }
+
+    filteredProducts = productsData.filter(function (item) {
+
+        return (
+            category === "" ||
+            item.category === category
+        );
+
+    });
+
+
+    resetProductPicker();
+
+    resetImagePreview();
+
+    if (
+        enquiryProductPicker &&
+        enquiryProductPicker.classList.contains("open")
+    ) {
+
+        renderProductResults("");
+    }
+}
+
+function renderProductResults(keyword) {
+
+    if (!enquiryProductResults) {
+        return;
+    }
+
+
+    const normalizedKeyword =
+        String(keyword || "")
+            .trim()
+            .toLowerCase();
+
+
+    const matches = filteredProducts.filter(function (item) {
+
+        const productName =
+            String(item.name || "").toLowerCase();
+
+        return productName.includes(normalizedKeyword);
+
+    });
+
+
+    enquiryProductResults.innerHTML = "";
+
+    if (matches.length === 0) {
+
+        const noResults =
+            document.createElement("div");
+
+        noResults.className =
+            "enquiry-product-no-results";
+
+        noResults.textContent =
+            "No products found.";
+
+        enquiryProductResults.appendChild(
+            noResults
+        );
+
+        return;
+    }
+
+    matches.forEach(function (item) {
+
+        const originalIndex =
+            filteredProducts.indexOf(item);
+
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            "enquiry-product-result";
+
+        button.dataset.index =
+            originalIndex;
+
+
+        const image =
+            document.createElement("img");
+
+        image.src =
+            item.img || item.image || "";
+
+        image.alt =
+            item.name || "Product";
+
+
+        const name =
+            document.createElement("span");
+
+        name.className =
+            "enquiry-product-result-name";
+
+        name.textContent =
+            item.name || "Unnamed Product";
+
+
+        button.appendChild(image);
+        button.appendChild(name);
+
+        enquiryProductResults.appendChild(
+            button
+        );
+
+    });
+}
+
+function openEnquiryProductPicker() {
+
+    if (!enquiryProductPicker) {
+        return;
+    }
+
+
+    enquiryProductPicker.classList.add("open");
+
+
+    if (enquiryProductPickerTrigger) {
+
+        enquiryProductPickerTrigger.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+    }
+
+    renderProductResults(
+        enquiryProductSearch
+            ? enquiryProductSearch.value
+            : ""
+    );
+
+    if (enquiryProductSearch) {
+
+        setTimeout(function () {
+
+            enquiryProductSearch.focus();
+
+        }, 0);
+    }
+}
+
+function closeEnquiryProductPicker() {
+
+    if (!enquiryProductPicker) {
+        return;
+    }
+
+
+    enquiryProductPicker.classList.remove("open");
+
+
+    if (enquiryProductPickerTrigger) {
+
+        enquiryProductPickerTrigger.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+}
+
+if (enquiryProductPickerTrigger) {
+
+    enquiryProductPickerTrigger.addEventListener(
+        "click",
+        function () {
+
+            const isOpen =
+                enquiryProductPicker &&
+                enquiryProductPicker.classList.contains(
+                    "open"
+                );
+
+
+            if (isOpen) {
+
+                closeEnquiryProductPicker();
+
+            } else {
+
+                openEnquiryProductPicker();
+
+            }
+
+        }
+    );
+}
+
+if (enquiryProductSearch) {
+
+    enquiryProductSearch.addEventListener(
+        "input",
+        function () {
+
+            renderProductResults(
+                this.value
+            );
+
+        }
+    );
+}
+
+if (enquiryProductResults) {
+    enquiryProductResults.addEventListener("click", function (e) {
+
+        const result = e.target.closest(".enquiry-product-result");
+
+        if (!result) {
             return;
         }
 
-        // 清空列表
-        productSelection.innerHTML = "";
-        filteredProducts = [];
+        const index = Number(result.dataset.index);
+        const selectedProduct = filteredProducts[index];
 
-        // 添加默认选项
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.textContent = "Select Product";
-        productSelection.appendChild(defaultOption);
-
-        // 筛选数据并生成选项
-        productsData.forEach(function (item) {
-            if (category === "" || item.category === category) {
-                filteredProducts.push(item); // 存入当前分类的专属数组
-
-                const option = document.createElement("option");
-                // 将 value 设为在 filteredProducts 中的索引
-                option.value = filteredProducts.length - 1; 
-                option.textContent = item.name;
-                productSelection.appendChild(option);
-            }
-        });
-
-        // 重置图片预览
-        resetImagePreview();
-    }
-
-    function resetImagePreview() {
-        if (productPreview) productPreview.style.display = "none";
-        if (productImage) {
-            productImage.src = "";
-            productImage.alt = "";
+        if (!selectedProduct) {
+            return;
         }
+
+        if (productSelection) {
+            productSelection.value = index;
+        }
+
+        if (enquiryProductPickerValue) {
+            enquiryProductPickerValue.textContent = selectedProduct.name;
+            enquiryProductPickerValue.classList.add(
+                "enquiry-product-picker-selected"
+            );
+        }
+
+        if (productImage && productPreview) {
+            productImage.src =
+                selectedProduct.img ||
+                selectedProduct.image ||
+                "";
+
+            productImage.alt =
+                selectedProduct.name ||
+                "Selected Product";
+
+            productPreview.style.display = "block";
+        }
+
+        if (enquiryProductSearch) {
+            enquiryProductSearch.value = "";
+        }
+
+        closeEnquiryProductPicker();
+    });
+}
+
+document.addEventListener("click", function (e) {
+
+    if (!enquiryProductPicker) {
+        return;
     }
 
-    // 页面加载时列出所有产品
-    loadProducts("");
-
-    /* =========================================
-       2. Category 切换监听
-       ========================================= */
-    if (productCategory) {
-        productCategory.addEventListener("change", function () {
-            loadProducts(this.value);
-        });
+    if (enquiryProductPicker.contains(e.target)) {
+        return;
     }
 
-    /* =========================================
-       3. Product 选中监听 (更新图片预览)
-       ========================================= */
-    if (productSelection) {
-        productSelection.addEventListener("change", function () {
-            const index = this.value;
+    closeEnquiryProductPicker();
+});
 
-            if (index === "" || !filteredProducts[index]) {
-                resetImagePreview();
-                return;
-            }
+document.addEventListener(
+    "keydown",
+    function (e) {
 
-            const selectedProduct = filteredProducts[index];
-            if (productImage && productPreview) {
-                productImage.src = selectedProduct.img;
-                productImage.alt = selectedProduct.name;
-                productPreview.style.display = "block";
-            }
-        });
+        if (e.key === "Escape") {
+
+            closeEnquiryProductPicker();
+
+        }
+
     }
+);
 
-    /* =========================================
-       4. 辅助函数：显示 Validation 错误弹窗
-       ========================================= */
+if (productCategory) {
+
+    productCategory.addEventListener(
+        "change",
+        function () {
+
+            loadProducts(
+                this.value
+            );
+
+        }
+    );
+}
+
+loadProducts("");
+
     function showValidationError(message) {
         const valModal = document.getElementById("enquiry-validation-modal");
         const valMessage = document.getElementById("enquiry-validation-message");
@@ -831,58 +1759,102 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* =========================================
-       5. 表单提交 (包含严格正则格式校验 + EmailJS)
-       ========================================= */
     if (enquiryForm) {
-        enquiryForm.addEventListener("submit", function (e) {
+        enquiryForm.addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const customerName = document.getElementById("customer-name").value.trim();
-            // 🏢 获取 Company (非必填)
+
             const companyInput = document.getElementById("customer-company");
             const customerCompany = companyInput ? companyInput.value.trim() : "";
 
             const customerEmail = document.getElementById("customer-email").value.trim();
-            const customerPhone = document.getElementById("customer-phone").value.trim();
+			const customerPhoneInput = document.getElementById("customer-phone");
+			let customerPhone = "";
             
-            // 🔢 获取 Quantity (必填)
             const quantityInput = document.getElementById("product-quantity");
             const productQuantity = quantityInput ? quantityInput.value.trim() : "";
 
             const selectedIndex = productSelection.value;
 
-            // 正则表达式验证
-            // Email 验证：必须包含完整的域名后缀（如 .com, .my）
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            // 电话验证：马来西亚手机号码格式（01x-xxxxxxx 或 +601x-xxxxxxx），最少8位数字
-            const phonePattern = /^(\+?60|0)1[0-46-9]\d{7,8}$/;
 
-            // 1. 验证 Email
             if (!emailPattern.test(customerEmail)) {
                 showValidationError("Please enter a valid email address (e.g., example@gmail.com).");
                 return;
             }
 
-            // 2. 验证 电话
-            if (!phonePattern.test(customerPhone.replace(/[\s-]/g, ''))) {
-                showValidationError("Please enter a valid Phone/WhatsApp number (e.g., 012-345-6789).");
-                return;
-            }
+			if (iti) {
+				await iti.promise;
 
-            // 3. 验证是否选择了产品
+				if (!iti.isValidNumber()) {
+					const errorCode = iti.getValidationError();
+
+					let phoneErrorMessage =
+						"Please enter a valid Phone / WhatsApp number.";
+
+					switch (errorCode) {
+
+						case intlTelInput.VALIDATION_ERROR.TOO_SHORT:
+							phoneErrorMessage =
+								"The phone number is too short for the selected country.";
+							break;
+
+						case intlTelInput.VALIDATION_ERROR.TOO_LONG:
+							phoneErrorMessage =
+								"The phone number is too long for the selected country.";
+							break;
+
+						case intlTelInput.VALIDATION_ERROR.INVALID_COUNTRY_CODE:
+							phoneErrorMessage =
+								"Please select a valid country.";
+							break;
+
+						case intlTelInput.VALIDATION_ERROR.INVALID_LENGTH:
+							phoneErrorMessage =
+								"The phone number length is invalid for the selected country.";
+							break;
+					}
+
+					showValidationError(phoneErrorMessage);
+
+					customerPhoneInput.classList.add("iti-phone-invalid");
+					customerPhoneInput.classList.remove("iti-phone-valid");
+
+					return;
+				}
+
+				customerPhoneInput.classList.remove("iti-phone-invalid");
+				customerPhoneInput.classList.add("iti-phone-valid");
+
+				customerPhone = iti.getNumber();
+
+			} else {
+
+				customerPhone = customerPhoneInput.value.trim();
+			}
+
             if (selectedIndex === "") {
                 showValidationError("Please select a product from the list.");
                 return;
             }
 
-            // 4. 验证 Quantity (必填且必须大于等于 1)
             if (!productQuantity || isNaN(productQuantity) || parseInt(productQuantity, 10) < 1) {
                 showValidationError("Please enter a valid quantity (at least 1).");
                 return;
             }
 
             const selectedProduct = filteredProducts[selectedIndex] || null;
+
+
+			const whatsappNumber = customerPhone.replace(/\D/g, "");
+
+			const whatsappMessage =
+				`Hi ${customerName}, this is OSCEC. Thank you for your enquiry regarding ${selectedProduct ? selectedProduct.name : "our product"}. We would like to follow up with you.`;
+
+			const whatsappLink =
+				`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
 
             const categoryValue = productCategory.value;
             let categoryName = "Not Selected";
@@ -894,43 +1866,65 @@ document.addEventListener("DOMContentLoaded", function () {
                 customer_name: customerName,
                 customer_email: customerEmail,
                 customer_phone: customerPhone,
+				whatsapp_link: whatsappLink,
 				customer_company: customerCompany !== "" ? customerCompany : "-",
                 product_category: categoryName,
                 product_name: selectedProduct ? selectedProduct.name : "Not Selected",
-                product_quantity: productQuantity, // 传入数量
+                product_quantity: productQuantity, 
                 product_image: selectedProduct ? (selectedProduct.image || selectedProduct.img) : "",
                 product_interest: document.getElementById("product-interest").checked ? "Yes" : "No",
                 customer_message: document.getElementById("customer-message").value.trim(),
                 time: new Date().toLocaleString()
             };
 
-            // 显示 Loading 弹窗
             if (typeof window.showEnquiryLoading === "function") {
                 window.showEnquiryLoading();
             }
 
-            // 发送邮件
-            emailjs.send("service_z4gs2dj", "template_j373a3i", templateParams)
-                .then(function (response) {
-                    if (typeof window.showEnquirySuccess === "function") {
-                        window.showEnquirySuccess();
-                    }
-                    // 仅在成功时重置表单
-                    enquiryForm.reset();
-                    // 成功重置后，将 quantity 恢复默认值 1
-                    if (quantityInput) quantityInput.value = "1";
-                    loadProducts(""); 
-                })
-                .catch(function (error) {
-                    console.error("EmailJS 发送失败:", error);
-                    if (typeof window.showEnquiryFailure === "function") {
-                        window.showEnquiryFailure();
-                    }
-                    // 失败时不调用 reset()，保留用户填写的表单内容
-                });
-        });
-    }
-});
+			emailjs.send("service_z4gs2dj", "template_j373a3i", templateParams)
+				.then(
+					function (response) {
+
+						console.log("EmailJS 发送成功:", response);
+
+						if (typeof window.showEnquirySuccess === "function") {
+							window.showEnquirySuccess();
+						}
+
+						enquiryForm.reset();
+
+						if (quantityInput) {
+							quantityInput.value = "1";
+						}
+
+						if (iti) {
+							iti.setCountry("my");
+							iti.setNumber("");
+						}
+
+						if (customerPhoneInput) {
+							customerPhoneInput.classList.remove("iti-phone-valid");
+							customerPhoneInput.classList.remove("iti-phone-invalid");
+						}
+
+						loadProducts("");
+					},
+
+					function (error) {
+
+						console.error("EmailJS 真正发送失败:", error);
+
+						console.error("EmailJS error status:", error && error.status);
+						console.error("EmailJS error text:", error && error.text);
+
+						if (typeof window.showEnquiryFailure === "function") {
+							window.showEnquiryFailure();
+						}
+					}
+				);
+			});
+		}
+	});
 </script>
 
 <!-- Enquiry Validation Modal Start -->
@@ -1140,7 +2134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /*
-     * Close Failure Modal (保留答案核心：添加 e.preventDefault() 阻止默认提交/刷新)
+     * Close Failure Modal
      */
     if (failureClose) {
         failureClose.addEventListener("click", function (e) {
@@ -1169,6 +2163,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
 </body>
 </html>
